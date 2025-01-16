@@ -51,8 +51,6 @@ public class JdbcDemo {
 
 
         }
-        public static void main(String[] args) {
-        Create(4,"pencil");
-        }
+
     }
 
