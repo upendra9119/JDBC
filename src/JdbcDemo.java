@@ -12,13 +12,13 @@ import java.util.Properties;
   7.close the connection
  */
 public class JdbcDemo {
-    
+
     public static Connection getConnection() {
 //     The Properties class is part of the java.util package.
 //     It is a specialized subclass of Hashtable that is designed to handle key-value pairs where both the key and value are Strings.
 //     It is commonly used for configuration and property files in Java applications.
         Properties props = new Properties();
-        try (FileInputStream fis = new FileInputStream("config.properties")) {
+        try (FileInputStream fis = new FileInputStream("src/config.properties")) {
             // Load properties from the file
             props.load(fis);
 
@@ -55,13 +55,29 @@ public class JdbcDemo {
         }catch (SQLException e){
             e.printStackTrace();
         }
-        
+
+    }
+
+    public static void Read(){
+        String sql ="select * from products";
+        try(Connection connection = getConnection();
+            PreparedStatement psmt = connection.prepareStatement(sql);
+        ResultSet resultset=psmt.executeQuery()){
+            System.out.println("The list of products are : ");
+            while(resultset.next()){
+                System.out.print(resultset.getInt("productid"));
+                System.out.print(" ");
+                System.out.println(resultset.getString("productname"));
 
 
-
-
+            }
 
         }
+        catch(SQLException e){
+            e.printStackTrace();
+
+        }
+    }
 
     }
 
