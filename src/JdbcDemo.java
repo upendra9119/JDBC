@@ -1,4 +1,7 @@
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 /*1.import
   2.load and register
@@ -9,27 +12,35 @@ import java.sql.*;
   7.close the connection
  */
 public class JdbcDemo {
-    //public static void main(String[] args) {
+    
     public static Connection getConnection() {
+//     The Properties class is part of the java.util package.
+//     It is a specialized subclass of Hashtable that is designed to handle key-value pairs where both the key and value are Strings.
+//     It is commonly used for configuration and property files in Java applications.
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream("config.properties")) {
+            // Load properties from the file
+            props.load(fis);
 
-       try {
-           String url = "jdbc:mysql://localhost:3306/upendra";
-           String username = "root";
-           String password = "root";
+            // Get credentials from properties
+            String url = props.getProperty("db.url");
+            String username = props.getProperty("db.user");
+            String password = props.getProperty("db.pass");
 
-           return DriverManager.getConnection(url, username, password);
-       }
-
-            catch(SQLException e){
-           System.out.println("check url or databasename or username, password" +e);
-               e.printStackTrace();
-                return null;
-
-
-            }
-
+            // Establish the connection
+            return DriverManager.getConnection(url, username, password);
+        } catch (IOException e) {
+            System.out.println("Error loading configuration file: " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Error establishing database connection: " + e.getMessage());
+        }
+        return null; // Return null if the connection fails
     }
-        public static void Create(int productid,String productname){
+
+
+
+
+    public static void Create(int productid,String productname){
         String Sql ="insert into products values(?,?)";
 
         try (Connection con = getConnection();
