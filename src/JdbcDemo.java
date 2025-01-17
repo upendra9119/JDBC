@@ -78,6 +78,18 @@ public class JdbcDemo {
 
         }
     }
+    public static void Update(int productid,String productname){
+        String Sql="update products set productname=? where productid=?";
+        try(Connection connection = getConnection();
+            PreparedStatement psmt = connection.prepareStatement(Sql)){
+            psmt.setString(1,productname);
+            psmt.setInt(2,productid);
+            int rowsAffected = psmt.executeUpdate();
+            System.out.println(rowsAffected + " Rows got updated");
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 
     }
 
