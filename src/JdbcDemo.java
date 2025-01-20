@@ -91,5 +91,19 @@ public class JdbcDemo {
         }
     }
 
+    public static void Delete(int productid){
+        String Sql="delete from products where productid=?";
+        try(Connection connection =getConnection();
+            PreparedStatement psmpt = connection.prepareStatement(Sql)){
+            psmpt.setInt(1,productid);
+            int rowsAffected = psmpt.executeUpdate();
+            System.out.println(rowsAffected + " Rows got deleted");
+
+        }catch(SQLException e){
+            e.printStackTrace();
+
+        }
+    }
+
     }
 
